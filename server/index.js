@@ -1,6 +1,7 @@
 const express = require('express')
 const compression = require('compression')
 const logger = require('morgan')
+const hashStore = require('./hash-store')
 
 const app = express()
 app.disable('x-powered-by')
@@ -17,13 +18,14 @@ app.use(
   })
 )
 
-const indexCssFile = isProd ? '/static/css/app.min.css' : '/static/css/app.css'
-
-app.get('/', (req, res) => {
-  res.render('index')
+// const indexCssFile = isProd ? '/static/css/app.min.css' : '/static/css/app.css'
+// app.use('/sitemap.xml', sitemapRouter)
+// app.use('/robots.txt', robotsRouter)
+app.get('/*', (req, res) => {
+  res.render('index', {
+    js: hashStore.withHash('/static/scripts/bundle.js')
+  })
 })
-//app.use('/sitemap.xml', sitemapRouter)
-//app.use('/robots.txt', robotsRouter)
 
 const port = process.env.PORT || 4000
 app.listen(port, () => {

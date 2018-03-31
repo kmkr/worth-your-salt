@@ -4,8 +4,15 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run lint && npm run test && npm run package",
+    "package":
+      "NODE_ENV=production webpack --mode production --config client/webpack.config.js",
+    "start": "NODE_ENV=production node server/index.js",
+    "start:server": "node server/index.js",
+    "start:client":
+      "webpack --mode development --watch --config client/webpack.config.js",
+    "lint": "standard",
+    "test": "echo \"Error: no test specified\""
   },
   "repository": {
     "type": "git",
@@ -18,15 +25,21 @@
   },
   "homepage": "https://github.com/kmkr/worth-your-salt#readme",
   "dependencies": {
-    "babel": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
     "compression": "^1.7.2",
     "express": "^4.16.3",
+    "md5-file": "^3.2.3",
     "morgan": "^1.9.0",
     "pug": "^2.0.3"
   },
   "devDependencies": {
-    "prettier": "^1.11.1"
+    "babel": "^6.23.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "preact": "^8.2.7",
+    "prettier": "^1.11.1",
+    "standard": "^11.0.1",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13"
   }
 }
