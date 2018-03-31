@@ -5,7 +5,7 @@ import Submit from './submit'
 import { INDEX_ROUTE, SUBMIT_ROUTE, routeFromUrl } from './router'
 
 class App extends Component {
-  constructor () {
+  constructor() {
     super()
     this.openSubmit = this.openSubmit.bind(this)
     this.state = {
@@ -13,18 +13,33 @@ class App extends Component {
     }
   }
 
-  updateUrl (route) {
-    window.history.pushState(route.path, '', route.path)
+  componentDidMount() {
+    window.addEventListener('popstate', e => {
+      // Workaround for old Safaris popping state on first load
+      if (e.state || this.forcePopActivation) {
+        this.setState({
+          activePage: routeFromUrl()
+        })
+      }
+    })
+
+    setTimeout(() => {
+      this.forcePopActivation = true
+    }, 50)
   }
 
-  openSubmit () {
+  updateUrl(route) {
+    window.history.pushState(route, '', route.path)
+  }
+
+  openSubmit() {
     this.setState({
       activePage: SUBMIT_ROUTE
     })
     this.updateUrl(SUBMIT_ROUTE)
   }
 
-  render (_, { activePage }) {
+  render(_, { activePage }) {
     if (activePage === INDEX_ROUTE) {
       return <Front openSubmit={this.openSubmit} />
     }
